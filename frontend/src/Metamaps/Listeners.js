@@ -2,6 +2,7 @@
 
 import Active from './Active'
 import Control from './Control'
+import Export from './Export'
 import JIT from './JIT'
 import Mobile from './Mobile'
 import Realtime from './Realtime'
@@ -42,6 +43,11 @@ const Listeners = {
             Visualize.mGraph.plot()
           }
 
+          break
+        case 67: // if c or C is pressed
+          if (e.ctrlKey && e.target.tagName === 'BODY') {
+            Export.copySelection()
+          }
           break
         case 68: // if d or D is pressed
           if (e.ctrlKey || e.metaKey) {

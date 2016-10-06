@@ -6,6 +6,7 @@ import DataModel from './DataModel'
 import Control from './Control'
 import Create from './Create'
 import Debug from './Debug'
+import Export from './Export'
 import Filter from './Filter'
 import GlobalUI, {
   Search, CreateMap, ImportDialog, Account as GlobalUIAccount
@@ -41,6 +42,7 @@ Metamaps.DataModel = DataModel
 Metamaps.Control = Control
 Metamaps.Create = Create
 Metamaps.Debug = Debug
+Metamaps.Export = Export
 Metamaps.Filter = Filter
 Metamaps.GlobalUI = GlobalUI
 Metamaps.GlobalUI.Search = Search

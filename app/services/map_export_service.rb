@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 class MapExportService
   attr_reader :user, :map
-  def initialize(user, map)
+  def initialize(user, map, opts = {})
     @user = user
     @map = map
+    @topic_ids = opts[:topic_ids] if opts[:topic_ids]
+    @synapse_ids = opts[:synapse_ids] if opts[:synapse_ids]
   end
 
   def json
@@ -39,6 +41,7 @@ class MapExportService
     topic_mappings.map do |mapping|
       topic = mapping.mappable
       next nil if topic.nil?
+      next nil if @topic_ids && !@topic_ids.include?(topic.id)
       OpenStruct.new(
         id: topic.id,
         name: topic.name,
@@ -50,13 +53,14 @@ class MapExportService
         user: topic.user.name,
         permission: topic.permission
       )
-    end.compact
+    end.compact.uniq(&:id)
   end
 
   def exportable_synapses
-    visible_synapses = Pundit.policy_scope!(user, map.synapses)
+    visible_synapses = Pundit.policy_scope!(user, map.synapses).uniq
     visible_synapses.map do |synapse|
       next nil if synapse.nil?
+      next nil if @synapse_ids && !@synapse_ids.include?(synapse.id)
       OpenStruct.new(
         topic1: synapse.topic1_id,
         topic2: synapse.topic2_id,
