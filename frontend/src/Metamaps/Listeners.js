@@ -1,5 +1,7 @@
 /* global $ */
 
+import clipboard from 'clipboard-js'
+
 import Active from './Active'
 import Control from './Control'
 import Export from './Export'
@@ -29,6 +31,26 @@ const Listeners = {
           break
         case 27: // if esc key is pressed
           JIT.escKeyHandler()
+          break
+        case 37: // if Left arrow key is pressed
+          if (e.target.tagName === 'BODY') {
+            Visualize.mGraph.canvas.translate(-20, 0)
+          }
+          break
+        case 38: // if Up arrow key is pressed
+          if (e.target.tagName === 'BODY') {
+            Visualize.mGraph.canvas.translate(0, -20)
+          }
+          break
+        case 39: // if Right arrow key is pressed
+          if (e.target.tagName === 'BODY') {
+            Visualize.mGraph.canvas.translate(20, 0)
+          }
+          break
+        case 40: // if Down arrow key is pressed
+          if (e.target.tagName === 'BODY') {
+            Visualize.mGraph.canvas.translate(0, 20)
+          }
           break
         case 65: // if a or A is pressed
           if ((e.ctrlKey || e.metaKey) && onCanvas) {
