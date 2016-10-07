@@ -281,8 +281,8 @@ const Import = {
           topic1, topic2, {
             success: synapse => {
               Control.selectEdge(synapse.get('edge'))
-           }
-         }
+            }
+          }
         )
       })
     })
