@@ -125,4 +125,7 @@ describe('Metamaps.Util.js', function() {
   describe('resizeCanvas', function() {
     it.skip('TODO need a canvas')
   })
+  describe('queryParams', function() {
+    it.skip('TODO need window')
+  })
 })

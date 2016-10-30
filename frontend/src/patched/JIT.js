@@ -2607,10 +2607,7 @@ Extras.Classes.Navigation = new Class({
     
     // START METAMAPS CODE
     if (Metamaps.Mouse.didPan) Metamaps.JIT.SmoothPanning();
-    
-    
     // END METAMAPS CODE
-    
   },
   
   // START METAMAPS CODE
