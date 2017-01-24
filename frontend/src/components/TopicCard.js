@@ -49,9 +49,8 @@ var funcs = {
     nodeValues.desc_html = Util.mdToHTML(nodeValues.desc_markdown)
     return nodeValues
   },
-  bindShowCardListeners: function(topic) {
-    var self = TopicCard
-
+  bindShowCardListeners: function(topic, ActiveMapper) {
+    var authorized = topic.authorizeToEdit(ActiveMapper)
     var selectingMetacode = false
     // attach the listener that shows the metacode title when you hover over the image
     $('.showcard .metacodeImage').mouseenter(function() {
@@ -133,7 +132,7 @@ var funcs = {
       })
       $('.metacodeSelect li li').click(metacodeLiClick)
 
-      var bipName = $(showCard).find('.best_in_place_name')
+      var bipName = $('.showcard').find('.best_in_place_name')
       bipName.bind('best_in_place:activate', function() {
         var $el = bipName.find('textarea')
         var el = $el[0]
@@ -165,7 +164,7 @@ var funcs = {
       })
 
       // this is for all subsequent renders after in-place editing the desc field
-      const bipDesc = $(showCard).find('.best_in_place_desc')
+      const bipDesc = $('.showcard').find('.best_in_place_desc')
       bipDesc.bind('ajax:success', function() {
         var desc = $(this).html() === $(this).data('bip-nil')
         ? ''
@@ -218,7 +217,7 @@ var funcs = {
     }
     // ability to change permission
     var selectingPermission = false
-    if (topic.authorizePermissionChange(Active.Mapper)) {
+    if (topic.authorizePermissionChange(ActiveMapper)) {
       $('.showcard .yourTopic .mapPerm').click(openPermissionSelect)
       $('.showcard').click(hidePermissionSelect)
     }
@@ -260,9 +259,10 @@ class ReactTopicCard extends Component {
   }
 
   componentDidMount = () => {
-    const { topic } = this.props
+    const { topic, ActiveMapper } = this.props
     embedly('on', 'card.rendered', this.embedlyCardRendered)
     topic.get('link') && topic.get('link') !== '' && this.loadLink()
+    funcs.bindShowCardListeners(topic, ActiveMapper)
   }
 
   componentWillUnmount = () => {
@@ -363,7 +363,7 @@ class ReactTopicCard extends Component {
             <div className="linkItem mapCount">
               <div className="mapCountIcon"></div>
               {values.map_count}
-              <div className ="hoverTip">Click to see which maps topic appears on</div>
+              <div className="hoverTip">Click to see which maps topic appears on</div>
               <div className="tip"><ul>{values.inmaps}</ul></div>
             </div>
             <a href={`/topics/${values.id}`} target="_blank" className="linkItem synapseCount">

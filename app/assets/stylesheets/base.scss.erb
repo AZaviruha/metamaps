@@ -191,15 +191,12 @@
   background-color: #e0e0e0;
 
   .linkItem {
-    float:left;
-    height:46px;
+    float: left;
     z-index: 1;
     position: relative;
     color: #424242;
     font-size: 14px;
-    line-height:14px;
-    height:12px;
-    padding:17px 0;
+    line-height: 14px;
 
     a {
       color: #424242;
@@ -207,34 +204,35 @@
   }
 
   .icon {
-    position:absolute;
-    width:100%;
-    z-index:1;
+    position: absolute;
+    z-index: 1;
     padding: 0;
     height: 48px;
-    left: -16px;
+    width: 100%;
+
+    .metacodeImage {
+      position: relative;
+      left: -16px;
+    }
   }
   
   .contributor {
-    margin-left: 24px;
     bottom: 7px;
+    margin-left: 20px;
 
     .contributorIcon {
-      display: inline-block;
+      position: relative;
       vertical-align: middle;
-      border-radius: 14px;
+      border-radius: 16px;
       margin: 5px;
-    }
-    span {
-      font-family: 'din-regular', sans-serif;
-      font-size: 14px;
-    }
-
-    .contributorIcon {
-      position: absolute;
       top: 8px;
       left: 0;
       border-radius: 16px;
+    }
+
+    span {
+      font-family: 'din-regular', sans-serif;
+      font-size: 14px;
     }
 
     .contributorName {
@@ -249,8 +247,20 @@
       font-size: 12px;
       padding: 3px 5px 2px;
       white-space: nowrap;
-      margin-top: 36px;
-      margin-left: -32px;
+      margin-top: 8px;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 26px;
+        left: 10px;
+        margin-top: -30px;
+        width: 0;
+        height: 0;
+        border-bottom: 4px solid #000000;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+      }
     }
 
     &:hover .contributorName {
@@ -259,8 +269,6 @@
   }
 
   .mapCount {
-    margin-left: 48px;
-    width: 24px;
     padding:17px 0 17px 36px;
 
     .mapCountIcon {
