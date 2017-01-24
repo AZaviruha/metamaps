@@ -299,6 +299,15 @@ class ReactTopicCard extends Component {
               className="titleWrapper"
               id="titleActivator"
               classEditing="riek-editing"
+              editProps={{
+                onKeyPress: e => {
+                  const ENTER = 13
+                  if (e.which === ENTER) {
+                    e.preventDefault()
+                    this.props.updateTopic({ name: e.target.value })
+                  }
+                }
+              }}
             />
           </span>
           <div className="links">
