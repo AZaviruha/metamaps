@@ -28,6 +28,9 @@ const TopicCard = {
     const topicCardObj = {
       topic: topic,
       ActiveMapper: Active.Mapper,
+      updateTopic: obj => {
+        topic.save(obj, { success: topic => self.populateShowCard(topic) })
+      },
       removeLink: () => {
         topic.save({
           link: null

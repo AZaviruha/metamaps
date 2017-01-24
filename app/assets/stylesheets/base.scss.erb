@@ -85,6 +85,11 @@
   display: table-cell;
   vertical-align: middle;
   padding: 0 16px;
+
+  &.riek-editing {
+    position: absolute;
+    top: 32px;
+  }
 }
 .canEdit #titleActivator:hover {
   background-image: url(<%= asset_data_uri('edit.png') %>);
@@ -93,7 +98,9 @@
   cursor: text;
 }
 
-.showcard .best_in_place_name textarea, .showcard .best_in_place_name input {
+.showcard .riek-editing,
+.showcard .best_in_place_name textarea,
+.showcard .best_in_place_name input {
   font-family: 'din-regular', sans-serif;
   color: #424242;
   font-size: 18px;

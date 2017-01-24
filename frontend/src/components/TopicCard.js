@@ -1,5 +1,6 @@
 /* global $, CanvasLoader, Countable, Hogan, embedly */
 import React, { PropTypes, Component } from 'react'
+import { RIETextArea } from 'riek'
 
 import Util from '../Metamaps/Util'
 
@@ -44,8 +45,8 @@ var funcs = {
     nodeValues.metacode_select = $('#metacodeOptions').html()
     nodeValues.desc_nil = 'Click to add description...'
     nodeValues.desc_markdown = (topic.get('desc') === '' && authorized)
-    ? nodeValues.desc_nil
-    : topic.get('desc')
+      ? nodeValues.desc_nil
+      : topic.get('desc')
     nodeValues.desc_html = Util.mdToHTML(nodeValues.desc_markdown)
     return nodeValues
   },
@@ -69,8 +70,8 @@ var funcs = {
       var metacodeId = parseInt($(this).attr('data-id'))
       var metacode = DataModel.Metacodes.get(metacodeId)
       $('.CardOnGraph').find('.metacodeTitle').html(metacode.get('name'))
-      .append('<div class="expandMetacodeSelect"></div>')
-      .attr('class', 'metacodeTitle mbg' + metacode.id)
+        .append('<div class="expandMetacodeSelect"></div>')
+        .attr('class', 'metacodeTitle mbg' + metacode.id)
       $('.CardOnGraph').find('.metacodeImage').css('background-image', 'url(' + metacode.get('icon') + ')')
       topic.save({
         metacode_id: metacode.id
@@ -131,56 +132,6 @@ var funcs = {
         event.stopPropagation()
       })
       $('.metacodeSelect li li').click(metacodeLiClick)
-
-      var bipName = $('.showcard').find('.best_in_place_name')
-      bipName.bind('best_in_place:activate', function() {
-        var $el = bipName.find('textarea')
-        var el = $el[0]
-
-        $el.attr('maxlength', '140')
-
-        $('.showcard .title').append('<div class="nameCounter forTopic"></div>')
-
-        var callback = function(data) {
-          $('.nameCounter.forTopic').html(data.all + '/140')
-        }
-        Countable.live(el, callback)
-      })
-      bipName.bind('best_in_place:deactivate', function() {
-        $('.nameCounter.forTopic').remove()
-      })
-      bipName.keypress(function(e) {
-        const ENTER = 13
-        if (e.which === ENTER) { // enter
-          $(this).data('bestInPlaceEditor').update()
-        }
-      })
-
-      // bind best_in_place ajax callbacks
-      bipName.bind('ajax:success', function() {
-        var name = Util.decodeEntities($(this).html())
-        topic.set('name', name)
-        topic.trigger('saved')
-      })
-
-      // this is for all subsequent renders after in-place editing the desc field
-      const bipDesc = $('.showcard').find('.best_in_place_desc')
-      bipDesc.bind('ajax:success', function() {
-        var desc = $(this).html() === $(this).data('bip-nil')
-        ? ''
-        : $(this).text()
-        topic.set('desc', desc)
-        $(this).data('bip-value', desc)
-        this.innerHTML = Util.mdToHTML(desc)
-        topic.trigger('saved')
-      })
-      bipDesc.keypress(function(e) {
-        // allow typing Enter with Shift+Enter
-        const ENTER = 13
-        if (e.shiftKey === false && e.which === ENTER) {
-          $(this).data('bestInPlaceEditor').update()
-        }
-      })
     }
 
     var permissionLiClick = function(event) {
@@ -240,8 +191,9 @@ var funcs = {
       function(event) {
         $('.extraText').toggleClass('hideExtra')
         $('.showMore').html(originalText)
-      })
-    }
+      }
+    )
+  }
 }
 
 class ReactTopicCard extends Component {
@@ -341,11 +293,13 @@ class ReactTopicCard extends Component {
       <div className={classname}>
         <div className={`CardOnGraph ${hasAttachment ? 'hasAttachment' : ''}`} id={`topic_${values.id}`}>
           <span className="title">
-            <div className="titleWrapper" id="titleActivator">
-              <span className="best_in_place best_in_place_name">
-                {values.name}
-              </span>
-            </div>
+            <RIETextArea value={values.name}
+              propName="name"
+              change={this.props.updateTopic}
+              className="titleWrapper"
+              id="titleActivator"
+              classEditing="riek-editing"
+            />
           </span>
           <div className="links">
             <div className="linkItem icon">
@@ -413,8 +367,8 @@ ReactTopicCard.propTypes = {
   topic: PropTypes.object,
   ActiveMapper: PropTypes.object,
   removeLink: PropTypes.func,
-  addLink: PropTypes.func
+  addLink: PropTypes.func,
+  updateTopic: PropTypes.func
 }
 
 export default ReactTopicCard
-
