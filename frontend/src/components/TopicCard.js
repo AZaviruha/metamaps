@@ -354,7 +354,7 @@ class ReactTopicCard extends Component {
                 <div className="expandMetacodeSelect"></div>
               </div>
               <div className="metacodeImage" style={{backgroundImage: `url(${values.imgsrc})`}} title="click and drag to move card"></div>
-              <div className="metacodeSelect">{values.metacode_select}</div>
+              <div className="metacodeSelect" dangerouslySetInnerHTML={{ __html: values.metacode_select }} />
             </div>
             <div className="linkItem contributor">
               <a href={`/explore/mapper/${values.userid}`} target="_blank"><img src={values.userimage} className="contributorIcon" width="32" height="32" /></a>
