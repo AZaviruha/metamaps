@@ -3,16 +3,6 @@ import React, { PropTypes, Component } from 'react'
 
 import Util from '../Metamaps/Util'
 
-/*
-
-
-TopicCard.bindShowCardListeners(topic)
-
-
-
-do globalui notify for invalid link?
-*/
-
 var funcs = {
   buildObject: function(topic, ActiveMapper) {
     var nodeValues = {}
@@ -253,7 +243,7 @@ var funcs = {
         $('.showMore').html(originalText)
       })
     }
-  }
+}
 
 class ReactTopicCard extends Component {
   constructor(props) {
@@ -354,6 +344,33 @@ class ReactTopicCard extends Component {
               </span>
             </div>
           </span>
+          <div className="links">
+            <div className="linkItem icon">
+              <div className={`metacodeTitle ${values.metacode_class}`}>
+                {values.metacode}
+                <div className="expandMetacodeSelect"></div>
+              </div>
+              <div className="metacodeImage" style={{backgroundImage: `url(${values.imgsrc})`}} title="click and drag to move card"></div>
+              <div className="metacodeSelect">{values.metacode_select}</div>
+            </div>
+            <div className="linkItem contributor">
+              <a href={`/explore/mapper/${values.userid}`} target="_blank"><img src={values.userimage} className="contributorIcon" width="32" height="32" /></a>
+              <div className="contributorName">{values.username}</div>
+            </div>
+            <div className="linkItem mapCount">
+              <div className="mapCountIcon"></div>
+              {values.map_count}
+              <div className ="hoverTip">Click to see which maps topic appears on</div>
+              <div className="tip"><ul>{values.inmaps}</ul></div>
+            </div>
+            <a href={`/topics/${values.id}`} target="_blank" className="linkItem synapseCount">
+              <div className="synapseCountIcon"></div>
+              {values.synapse_count}
+              <div className="tip">Click to see this topics synapses</div>
+            </a>
+            <div className={`linkItem mapPerm ${values.mk_permission}`} title={values.permission}></div>
+            <div className="clearfloat"></div>
+          </div>
           <div className="scroll">
             <div className="desc">
               <span className="best_in_place best_in_place_desc"
@@ -383,10 +400,6 @@ class ReactTopicCard extends Component {
               </div>
             </div>
           </div>}
-          <div className='contributor'>
-            <img src={values.userimage} className="contributorIcon" width="28" height="28" />
-            <span>{values.username}</span>
-          </div>
           <div className="clearfloat"></div>
         </div>
       </div>)
@@ -402,32 +415,3 @@ ReactTopicCard.propTypes = {
 
 export default ReactTopicCard
 
-/*
-<div className="links">
-  <div className="linkItem icon">
-    <div className={`metacodeTitle ${values.metacode_class}`}>
-      {values.metacode}
-      <div className="expandMetacodeSelect"></div>
-    </div>
-    <div className="metacodeImage" style={{backgroundImage: `url(${values.imgsrc})`}} title="click and drag to move card"></div>
-    <div className="metacodeSelect">{values.metacode_select}</div>
-  </div>
-  <div className="linkItem contributor">
-    <a href={`/explore/mapper/${values.userid}`} target="_blank"><img src={emptyAvatar} className="contributorIcon" width="32" height="32" /></a>
-    <div className="contributorName">{values.username}</div>
-  </div>
-  <div className="linkItem mapCount">
-    <div className="mapCountIcon"></div>
-    {values.map_count}
-    <div className ="hoverTip">Click to see which maps topic appears on</div>
-    <div className="tip"><ul>{values.inmaps}</ul></div>
-  </div>
-  <a href={`/topics/${values.id}`} target="_blank" className="linkItem synapseCount">
-    <div className="synapseCountIcon"></div>
-    {values.synapse_count}
-    <div className="tip">Click to see this topics synapses</div>
-  </a>
-  <div className={`linkItem mapPerm ${values.mk_permission}`} title={values.permission}></div>
-  <div className="clearfloat"></div>
-</div>
-*/
