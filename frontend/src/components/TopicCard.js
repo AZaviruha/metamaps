@@ -326,17 +326,20 @@ class ReactTopicCard extends Component {
     const { linkEdit, embedlyLinkLoaded, embedlyLinkStarted, embedlyLinkError } = this.state
     const values = funcs.buildObject(topic, ActiveMapper)
     var authorizedToEdit = topic.authorizeToEdit(ActiveMapper)
+
     let classname = 'permission'
-    if (authorizedToEdit) classname += ' canEdit'
-    else classname += ' cannotEdit'
+    if (authorizedToEdit) {
+      classname += ' canEdit'
+    } else {
+      classname += ' cannotEdit'
+    }
+
     if (topic.authorizePermissionChange(ActiveMapper)) classname += ' yourTopic'
     const hasAttachment = topic.get('link') && topic.get('link') !== ''
 
     return (
       <div className={classname}>
         <div className={`CardOnGraph ${hasAttachment ? 'hasAttachment' : ''}`} id={`topic_${values.id}`}>
-          <div className="metacodeImage" style={{backgroundImage: `url(${values.imgsrc})`}}></div>
-          <span className="metacodeName">{values.metacode}</span>
           <span className="title">
             <div className="titleWrapper" id="titleActivator">
               <span className="best_in_place best_in_place_name">
