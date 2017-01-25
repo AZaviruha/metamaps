@@ -4,6 +4,14 @@ import { RIETextArea } from 'riek'
 import Util from '../../Metamaps/Util'
 
 class MdTextArea extends RIETextArea {
+  keyDown = (event) => {
+    // we'll handle Enter on our own, thanks
+    const ESC = 27
+    if (event.keyCode === ESC) {
+      this.cancelEditing()
+    }
+  }
+
   renderNormalComponent = () => {
     const value = this.state.newValue || this.props.value
 
@@ -36,7 +44,7 @@ class Desc extends Component {
             editProps={{
               onKeyPress: e => {
                 const ENTER = 13
-                if (e.shiftKey && e.which === ENTER) {
+                if (!e.shiftKey && e.which === ENTER) {
                   e.preventDefault()
                   this.props.onChange({ desc: e.target.value })
                 }
