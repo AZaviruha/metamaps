@@ -1,5 +1,8 @@
 import React, { PropTypes, Component } from 'react'
 
+import DataModel from '../../Metamaps/DataModel'
+import Visualize from '../../Metamaps/Visualize'
+
 const inmaps = (topic) => {
   const inmapsArray = topic.get('inmaps') || []
   const inmapsLinks = topic.get('inmapsLinks') || []
@@ -26,6 +29,7 @@ const inmaps = (topic) => {
   return html
 }
 
+// TODO all of these should be largely turned into passed-in callbacks
 const bindShowCardListeners = (topic, ActiveMapper) => {
   var authorized = topic.authorizeToEdit(ActiveMapper)
   var selectingMetacode = false
