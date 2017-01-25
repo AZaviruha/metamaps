@@ -30,14 +30,6 @@ const TopicCard = {
       ActiveMapper: Active.Mapper,
       updateTopic: obj => {
         topic.save(obj, { success: topic => self.populateShowCard(topic) })
-      },
-      removeLink: () => {
-        topic.save({
-          link: null
-        },{success: topic => self.populateShowCard(topic)})
-      },
-      addLink: link => {
-        topic.save({link},{success: topic => self.populateShowCard(topic)})
       }
     }
     ReactDOM.render(

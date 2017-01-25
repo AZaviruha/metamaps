@@ -5,6 +5,7 @@ import { RIETextArea } from 'riek'
 import Title from './Title'
 import Links from './Links'
 import Desc from './Desc'
+import Attachments from './Attachments'
 
 const bindShowCardListeners = (topic, ActiveMapper) => {
   var authorized = topic.authorizeToEdit(ActiveMapper)
@@ -152,85 +153,13 @@ const bindShowCardListeners = (topic, ActiveMapper) => {
 }
 
 class ReactTopicCard extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      nameEdit: '',
-      descEdit: '',
-      linkEdit: '',
-      embedlyLinkError: false,
-      embedlyLinkStarted: false,
-      embedlyLinkLoaded: false
-    }
-  }
-
   componentDidMount = () => {
     const { topic, ActiveMapper } = this.props
-    embedly('on', 'card.rendered', this.embedlyCardRendered)
-    topic.get('link') && topic.get('link') !== '' && this.loadLink()
     bindShowCardListeners(topic, ActiveMapper)
   }
 
-  componentWillUnmount = () => {
-    embedly('off')
-  }
-
-  componentDidUpdate = () => {
-    const { topic } = this.props
-    const { embedlyLinkStarted } = this.state
-    !embedlyLinkStarted && topic.get('link') && topic.get('link') !== '' && this.loadLink()
-  }
-
-  embedlyCardRendered = (iframe, test) => {
-    this.setState({embedlyLinkLoaded: true, embedlyLinkError: false})
-  }
-
-  resetLinkInput = () => {
-    this.setState({linkEdit: ''})
-    this.linkInput.focus()
-  }
-
-  onLinkChangeHandler = e => {
-    this.setState({linkEdit: e.target.value})
-  }
-
-  onLinkKeyUpHandler = e => {
-    const { addLink } = this.props
-    const { linkEdit } = this.state
-    let finalLink
-    const ENTER_KEY = 13
-    if (e.which === ENTER_KEY) {
-      // TODO evaluate converting this to '//' no matter what (infer protocol)
-      if (linkEdit.slice(0, 7) !== 'http://' &&
-      linkEdit.slice(0, 8) !== 'https://' &&
-      linkEdit.slice(0, 2) !== '//') {
-        finalLink = '//' + linkEdit
-      }
-      this.setState({linkEdit: ''})
-      addLink(finalLink)
-    }
-  }
-
-  loadLink = () => {
-    this.setState({embedlyLinkStarted: true})
-    var e = embedly('card', document.getElementById('embedlyLink'))
-    if (e.type === 'error') this.setState({embedlyLinkError: true})
-  }
-
-  removeLink = () => {
-    const { removeLink } = this.props
-    this.setState({
-      embedlyLinkStarted: false,
-      embedlyLinkLoaded: false,
-      embedlyLinkError: false
-    })
-    removeLink()
-  }
-
   render = () => {
-    const { topic, ActiveMapper, removeLink } = this.props
-    const { linkEdit, embedlyLinkLoaded, embedlyLinkStarted, embedlyLinkError } = this.state
+    const { topic, ActiveMapper } = this.props
     var authorizedToEdit = topic.authorizeToEdit(ActiveMapper)
 
     let classname = 'permission'
@@ -253,37 +182,20 @@ class ReactTopicCard extends Component {
             authorizedToEdit={topic.authorizeToEdit(ActiveMapper)}
             onChange={this.props.updateTopic}
           />
-          {hasAttachment && <div className={`embeds ${embedlyLinkLoaded ? '' : 'nonEmbedlyLink'}`}>
-            <a href={topic.get('link')} id="embedlyLink" target="_blank" data-card-description="0">
-              {topic.get('link')}
-            </a>
-            {embedlyLinkStarted && !embedlyLinkLoaded && !embedlyLinkError && <div id="embedlyLinkLoader">loading...</div>}
-            {authorizedToEdit && <div id="linkremove" onClick={this.removeLink}></div>}
-          </div>}
-          {authorizedToEdit && !hasAttachment && <div className='attachments'>
-            <div className="addLink">
-              <div id="addLinkIcon"></div>
-              <div id="addLinkInput">
-                <input ref={input => this.linkInput = input}
-                  placeholder="Enter or paste a link"
-                  value={linkEdit}
-                  onChange={this.onLinkChangeHandler}
-                  onKeyUp={this.onLinkKeyUpHandler}></input>
-                {linkEdit && <div id="addLinkReset"></div>}
-              </div>
-            </div>
-          </div>}
+          <Attachments topic={this.props.topic}
+            ActiveMapper={this.props.ActiveMapper}
+            updateTopic={this.props.updateTopic}
+          />
           <div className="clearfloat"></div>
         </div>
-      </div>)
+      </div>
+    )
   }
 }
 
 ReactTopicCard.propTypes = {
   topic: PropTypes.object,
   ActiveMapper: PropTypes.object,
-  removeLink: PropTypes.func,
-  addLink: PropTypes.func,
   updateTopic: PropTypes.func
 }
 
