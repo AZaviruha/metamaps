@@ -2,54 +2,20 @@
 import React, { PropTypes, Component } from 'react'
 import { RIETextArea } from 'riek'
 
-import Util from '../Metamaps/Util'
+import Util from '../../Metamaps/Util'
+
+import Title from './Title'
+import Links from './Links'
+
+const descHTML = (topic, ActiveMapper) => {
+  const authorized = topic.authorizeToEdit(ActiveMapper)
+  const descMarkdown = (topic.get('desc') === '' && authorized)
+    ? 'Click to add description...'
+    : topic.get('desc')
+  return Util.mdToHTML(descMarkdown)
+}
 
 var funcs = {
-  buildObject: function(topic, ActiveMapper) {
-    var nodeValues = {}
-    var authorized = topic.authorizeToEdit(ActiveMapper)
-    var inmapsAr = topic.get('inmaps') || []
-    var inmapsLinks = topic.get('inmapsLinks') || []
-    nodeValues.inmaps = ''
-    if (inmapsAr.length < 6) {
-      for (let i = 0; i < inmapsAr.length; i++) {
-        const url = '/maps/' + inmapsLinks[i]
-        nodeValues.inmaps += '<li><a href="' + url + '">' + inmapsAr[i] + '</a></li>'
-      }
-    } else {
-      for (let i = 0; i < 5; i++) {
-        const url = '/maps/' + inmapsLinks[i]
-        nodeValues.inmaps += '<li><a href="' + url + '">' + inmapsAr[i] + '</a></li>'
-      }
-      const extra = inmapsAr.length - 5
-      nodeValues.inmaps += '<li><span class="showMore">See ' + extra + ' more...</span></li>'
-      for (let i = 5; i < inmapsAr.length; i++) {
-        const url = '/maps/' + inmapsLinks[i]
-        nodeValues.inmaps += '<li class="hideExtra extraText"><a href="' + url + '">' + inmapsAr[i] + '</a></li>'
-      }
-    }
-    nodeValues.permission = topic.get('permission')
-    nodeValues.mk_permission = topic.get('permission').substring(0, 2)
-    nodeValues.map_count = topic.get('map_count').toString()
-    nodeValues.synapse_count = topic.get('synapse_count').toString()
-    nodeValues.id = topic.isNew() ? topic.cid : topic.id
-    nodeValues.metacode = topic.getMetacode().get('name')
-    nodeValues.metacode_class = 'mbg' + topic.get('metacode_id')
-    nodeValues.imgsrc = topic.getMetacode().get('icon')
-    nodeValues.name = topic.get('name')
-    nodeValues.userid = topic.get('user_id')
-    nodeValues.username = topic.get('user_name')
-    nodeValues.userimage = topic.get('user_image')
-    nodeValues.date = topic.getDate()
-    // the code for this is stored in /views/main/_metacodeOptions.html.erb
-    nodeValues.metacode_select = $('#metacodeOptions').html()
-    nodeValues.desc_nil = 'Click to add description...'
-    nodeValues.desc_markdown = (topic.get('desc') === '' && authorized)
-      ? nodeValues.desc_nil
-      : topic.get('desc')
-    nodeValues.desc_html = Util.mdToHTML(nodeValues.desc_markdown)
-    return nodeValues
-  },
   bindShowCardListeners: function(topic, ActiveMapper) {
     var authorized = topic.authorizeToEdit(ActiveMapper)
     var selectingMetacode = false
@@ -134,6 +100,12 @@ var funcs = {
       $('.metacodeSelect li li').click(metacodeLiClick)
     }
 
+    var hidePermissionSelect = function() {
+      selectingPermission = false
+      $('.showcard .yourTopic .mapPerm').removeClass('minimize') // this line flips the pull up arrow to a drop down arrow
+      $('.showcard .permissionSelect').remove()
+    }
+
     var permissionLiClick = function(event) {
       selectingPermission = false
       var permission = $(this).attr('class')
@@ -141,8 +113,8 @@ var funcs = {
         permission: permission,
         defer_to_map_id: null
       })
-      $('.showcard .mapPerm').removeClass('co pu pr minimize').addClass(permission.substring(0, 2))
-      $('.showcard .permissionSelect').remove()
+      $('.showcard .mapPerm').removeClass('co pu pr').addClass(permission.substring(0, 2))
+      hidePermissionSelect()
     }
 
     var openPermissionSelect = function(event) {
@@ -159,12 +131,6 @@ var funcs = {
         $('.showcard .permissionSelect li').click(permissionLiClick)
         event.stopPropagation()
       }
-    }
-
-    var hidePermissionSelect = function() {
-      selectingPermission = false
-      $('.showcard .yourTopic .mapPerm').removeClass('minimize') // this line flips the pull up arrow to a drop down arrow
-      $('.showcard .permissionSelect').remove()
     }
     // ability to change permission
     var selectingPermission = false
@@ -276,7 +242,6 @@ class ReactTopicCard extends Component {
   render = () => {
     const { topic, ActiveMapper, removeLink } = this.props
     const { linkEdit, embedlyLinkLoaded, embedlyLinkStarted, embedlyLinkError } = this.state
-    const values = funcs.buildObject(topic, ActiveMapper)
     var authorizedToEdit = topic.authorizeToEdit(ActiveMapper)
 
     let classname = 'permission'
@@ -289,58 +254,16 @@ class ReactTopicCard extends Component {
     if (topic.authorizePermissionChange(ActiveMapper)) classname += ' yourTopic'
     const hasAttachment = topic.get('link') && topic.get('link') !== ''
 
+    const topicId = topic.isNew() ? topic.cid : topic.id
     return (
       <div className={classname}>
-        <div className={`CardOnGraph ${hasAttachment ? 'hasAttachment' : ''}`} id={`topic_${values.id}`}>
-          <span className="title">
-            <RIETextArea value={values.name}
-              propName="name"
-              change={this.props.updateTopic}
-              className="titleWrapper"
-              id="titleActivator"
-              classEditing="riek-editing"
-              editProps={{
-                onKeyPress: e => {
-                  const ENTER = 13
-                  if (e.which === ENTER) {
-                    e.preventDefault()
-                    this.props.updateTopic({ name: e.target.value })
-                  }
-                }
-              }}
-            />
-          </span>
-          <div className="links">
-            <div className="linkItem icon">
-              <div className={`metacodeTitle ${values.metacode_class}`}>
-                {values.metacode}
-                <div className="expandMetacodeSelect"></div>
-              </div>
-              <div className="metacodeImage" style={{backgroundImage: `url(${values.imgsrc})`}} title="click and drag to move card"></div>
-              <div className="metacodeSelect" dangerouslySetInnerHTML={{ __html: values.metacode_select }} />
-            </div>
-            <div className="linkItem contributor">
-              <a href={`/explore/mapper/${values.userid}`} target="_blank"><img src={values.userimage} className="contributorIcon" width="32" height="32" /></a>
-              <div className="contributorName">{values.username}</div>
-            </div>
-            <div className="linkItem mapCount">
-              <div className="mapCountIcon"></div>
-              {values.map_count}
-              <div className="hoverTip">Click to see which maps topic appears on</div>
-              <div className="tip"><ul>{values.inmaps}</ul></div>
-            </div>
-            <a href={`/topics/${values.id}`} target="_blank" className="linkItem synapseCount">
-              <div className="synapseCountIcon"></div>
-              {values.synapse_count}
-              <div className="tip">Click to see this topics synapses</div>
-            </a>
-            <div className={`linkItem mapPerm ${values.mk_permission}`} title={values.permission}></div>
-            <div className="clearfloat"></div>
-          </div>
+        <div className={`CardOnGraph ${hasAttachment ? 'hasAttachment' : ''}`} id={`topic_${topicId}`}>
+          <Title name={topic.get('name')} onChange={this.props.updateTopic} />
+          <Links topic={topic} />
           <div className="scroll">
             <div className="desc">
               <span className="best_in_place best_in_place_desc"
-                dangerouslySetInnerHTML={{__html: values.desc_html}}
+                dangerouslySetInnerHTML={{  __html: descHTML(topic, ActiveMapper) }}
                 >
               </span>
               <div className="clearfloat"></div>
