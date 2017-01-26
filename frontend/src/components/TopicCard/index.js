@@ -26,6 +26,7 @@ class ReactTopicCard extends Component {
           <Title name={topic.get('name')} onChange={this.props.updateTopic} />
           <Links topic={topic}
             ActiveMapper={this.props.ActiveMapper}
+            updateTopic={this.props.updateTopic}
           />
           <Desc desc={topic.get('desc')}
             authorizedToEdit={topic.authorizeToEdit(ActiveMapper)}
