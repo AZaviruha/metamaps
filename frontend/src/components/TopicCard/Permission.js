@@ -11,10 +11,6 @@ class Permission extends Component {
     }
   }
   
-  componentDidMount = () => {
-    bindShowCardListeners(this.props.topic, this.props.ActiveMapper, this)
-  }
-  
   togglePermissionSelect = () => {
     this.setState({selectingPermission: !this.state.selectingPermission})
   }

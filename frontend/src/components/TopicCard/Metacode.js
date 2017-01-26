@@ -89,7 +89,7 @@ const bindShowCardListeners = (topic, ActiveMapper) => {
   }
 }
 
-class Links extends Component {
+class Metacode extends Component {
   componentDidMount = () => {
     bindShowCardListeners(this.props.topic, this.props.ActiveMapper)
   }
@@ -112,13 +112,11 @@ class Links extends Component {
   }
 }
 
-Links.propTypes = {
+Metacode.propTypes = {
   topic: PropTypes.object, // backbone object
   metacode: PropTypes.object, // backbone object
   ActiveMapper: PropTypes.object,
   updateTopic: PropTypes.func
 }
 
-export default Links
-
-
+export default Metacode
