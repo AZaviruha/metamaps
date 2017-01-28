@@ -49,7 +49,6 @@ const ChatView = {
     $('#' + ChatView.domId).hide()
   },
   render: () => {
-    return
     if (!Active.Map) return
     const self = ChatView
     self.mapChat = ReactDOM.render(React.createElement(MapChat, {

@@ -139,8 +139,7 @@ const Util = {
 
     // remove images to avoid http content in https context
     const walker = parsed.walker()
-    let event
-    while (event = walker.next()) {
+    for (let event = walker.next(); event = walker.next(); event) {
       const node = event.node
       if (node.type === 'image') {
         const imageAlt = node.firstChild.literal
