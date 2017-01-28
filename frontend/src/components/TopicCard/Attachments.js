@@ -71,6 +71,7 @@ class Attachments extends Component {
       embedlyLinkError: false
     })
     this.props.updateTopic({ link: null })
+    $('.embedly-card').remove() // failsafe
   }
 
   render = () => {
