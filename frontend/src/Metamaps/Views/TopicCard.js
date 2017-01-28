@@ -14,15 +14,6 @@ import ReactTopicCard from '../../components/TopicCard'
 
 const TopicCard = {
   openTopicCard: null, // stores the topic that's currently open
-  init: function() {
-    // initialize topic card draggability and resizability
-    $('.showcard').draggable({
-      handle: '.metacodeImage',
-      stop: function() {
-        $(this).height('auto')
-      }
-    })
-  },
   populateShowCard: function(topic) {
     var self = TopicCard
     const topicCardObj = {
@@ -36,6 +27,14 @@ const TopicCard = {
       React.createElement(ReactTopicCard, topicCardObj),
       document.getElementById('showcard')
     )
+
+    // initialize draggability
+    $('.showcard').draggable({
+      handle: '.metacodeImage',
+      stop: function() {
+        $(this).height('auto')
+      }
+    })
   },
   showCard: function(node, opts) {
     var self = TopicCard
