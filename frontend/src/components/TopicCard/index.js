@@ -30,6 +30,7 @@ class ReactTopicCard extends Component {
           <Links topic={topic}
             ActiveMapper={this.props.ActiveMapper}
             updateTopic={this.props.updateTopic}
+            metacodeSets={this.props.metacodeSets}
           />
           <Desc desc={topic.get('desc')}
             authorizedToEdit={authorizedToEdit}
@@ -49,7 +50,15 @@ class ReactTopicCard extends Component {
 ReactTopicCard.propTypes = {
   topic: PropTypes.object,
   ActiveMapper: PropTypes.object,
-  updateTopic: PropTypes.func
+  updateTopic: PropTypes.func,
+  metacodeSets: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    metacodes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      icon_path: PropTypes.string, // url
+      name: PropTypes.string
+    }))
+  }))
 }
 
 export default ReactTopicCard

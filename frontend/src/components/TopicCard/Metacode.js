@@ -91,34 +91,35 @@ const bindShowCardListeners = (topic, ActiveMapper) => {
   }
 }
 
-function metacodeOptions(metacodeSets) {
-	return (
-		<div id="metacodeOptions">
-			<ul>
-        {metacodeSets.map(set => {
-					<li key={set.name}>
-						<span>{set.name}</span>
-						<div class="expandMetacodeSet"></div>
-						<ul>
-              {set.metacodes.map(m => {
-								<li key={m.id} data-id={m.id}>
-									<img width="24" height="24" src={m.icon_path} alt={m.name} />
-									<div class="mSelectName">{m.name}</div>
-									<div class="clearfloat"></div>
-								</li>
-							})}
-						</ul>
-					</li>
-        })}
-  		</ul>
-		</div>
-	)
-}
-
 class Metacode extends Component {
   componentDidMount = () => {
     bindShowCardListeners(this.props.topic, this.props.ActiveMapper)
   }
+
+  metacodeOptions = () => {
+    return (
+      <div id="metacodeOptions">
+        <ul>
+          {this.props.metacodeSets.map(set => {
+            <li key={set.name}>
+              <span>{set.name}</span>
+              <div class="expandMetacodeSet"></div>
+              <ul>
+                {set.metacodes.map(m => {
+                  <li key={m.id} data-id={m.id}>
+                    <img width="24" height="24" src={m.icon_path} alt={m.name} />
+                    <div class="mSelectName">{m.name}</div>
+                    <div class="clearfloat"></div>
+                  </li>
+                })}
+              </ul>
+            </li>
+          })}
+        </ul>
+      </div>
+    )
+  }
+
 
   render = () => {
     const { metacode } = this.props
@@ -132,7 +133,9 @@ class Metacode extends Component {
           <div className="expandMetacodeSelect"></div>
         </div>
         <div className="metacodeImage" style={{backgroundImage: `url(${metacode.get('icon')})`}} title="click and drag to move card"></div>
-        <div className="metacodeSelect" dangerouslySetInnerHTML={{ __html: metacodeSelectHTML }} />
+        <div className="metacodeSelect">
+          {this.metacodeOptions()}
+        </div>
       </div>
     )
   }
@@ -142,7 +145,15 @@ Metacode.propTypes = {
   topic: PropTypes.object, // backbone object
   metacode: PropTypes.object, // backbone object
   ActiveMapper: PropTypes.object,
-  updateTopic: PropTypes.func
+  updateTopic: PropTypes.func,
+  metacodeSets: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    metacodes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      icon_path: PropTypes.string, // url
+      name: PropTypes.string
+    }))
+  }))
 }
 
 export default Metacode

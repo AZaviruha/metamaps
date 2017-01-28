@@ -9,14 +9,20 @@ import ReactTopicCard from '../../components/TopicCard'
 
 const TopicCard = {
   openTopicCard: null, // stores the topic that's currently open
+  metacodeSets: [],
+  init: function(serverData) {
+    const self = TopicCard
+    self.metacodeSets = serverData.metacodeSets
+  },
   populateShowCard: function(topic) {
-    var self = TopicCard
+    const self = TopicCard
     const topicCardObj = {
       topic: topic,
       ActiveMapper: Active.Mapper,
       updateTopic: obj => {
         topic.save(obj, { success: topic => self.populateShowCard(topic) })
-      }
+      },
+      metacodeSets: self.metacodeSets
     }
     ReactDOM.render(
       React.createElement(ReactTopicCard, topicCardObj),

@@ -72,6 +72,7 @@ class Links extends Component {
           metacode={metacode}
           ActiveMapper={ActiveMapper}
           updateTopic={this.props.updateTopic}
+          metacodeSets={this.props.metacodeSets}
         />
         <div className="linkItem contributor">
           <a href={`/explore/mapper/${topic.get('user_id')}`} target="_blank"><img src={topic.get('user_image')} className="contributorIcon" width="32" height="32" /></a>
@@ -102,7 +103,15 @@ class Links extends Component {
 Links.propTypes = {
   topic: PropTypes.object, // backbone object
   ActiveMapper: PropTypes.object,
-  updateTopic: PropTypes.func
+  updateTopic: PropTypes.func,
+  metacodeSets: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    metacodes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      icon_path: PropTypes.string, // url
+      name: PropTypes.string
+    }))
+  }))
 }
 
 export default Links
