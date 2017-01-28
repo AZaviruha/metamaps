@@ -23,7 +23,10 @@ class ReactTopicCard extends Component {
     return (
       <div className={classname}>
         <div className={`CardOnGraph ${hasAttachment ? 'hasAttachment' : ''}`} id={`topic_${topicId}`}>
-          <Title name={topic.get('name')} onChange={this.props.updateTopic} />
+          <Title name={topic.get('name')}
+            onChange={this.props.updateTopic}
+            authorizedToEdit={topic.authorizeToEdit(ActiveMapper)}
+          />
           <Links topic={topic}
             ActiveMapper={this.props.ActiveMapper}
             updateTopic={this.props.updateTopic}

@@ -31,8 +31,7 @@ class Desc extends Component {
       ? '<p.Click to add description...</p>'
       : Util.mdToHTML(this.props.desc)
 
-    const htmlSpan = <span dangerouslySetInnerHTML={{ __html: descHTML }} />
-
+    if (this.props.authorizedToEdit) {
     return (
       <div className="scroll">
         <div className="desc">
@@ -58,6 +57,17 @@ class Desc extends Component {
         </div>
       </div>
     )
+    } else {
+      return (
+        <div className="scroll">
+          <div className="desc">
+            <span className="riek_desc">
+              {this.props.desc}
+            </span>
+          </div>
+        </div>
+      )
+    }
   }
 }
 
