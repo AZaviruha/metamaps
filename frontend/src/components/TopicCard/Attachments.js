@@ -61,7 +61,7 @@ class Attachments extends Component {
   loadLink = () => {
     this.setState({embedlyLinkStarted: true})
     var e = embedly('card', document.getElementById('embedlyLink'))
-    if (e.type === 'error') this.setState({embedlyLinkError: true})
+    if (e && e.type === 'error') this.setState({embedlyLinkError: true})
   }
 
   removeLink = () => {
@@ -76,39 +76,48 @@ class Attachments extends Component {
   render = () => {
     const { topic, ActiveMapper } = this.props
     const { linkEdit, embedlyLinkLoaded, embedlyLinkStarted, embedlyLinkError } = this.state
-    var authorizedToEdit = topic.authorizeToEdit(ActiveMapper)
 
+    const authorizedToEdit = topic.authorizeToEdit(ActiveMapper)
     const hasAttachment = topic.get('link') && topic.get('link') !== ''
 
-    if (hasAttachment) {
-      return (
-        <div className={`embeds ${embedlyLinkLoaded ? '' : 'nonEmbedlyLink'}`}>
-          <a href={topic.get('link')} id="embedlyLink" target="_blank" data-card-description="0">
-            {topic.get('link')}
-          </a>
-          {embedlyLinkStarted && !embedlyLinkLoaded && !embedlyLinkError && <div id="embedlyLinkLoader">loading...</div>}
-          {authorizedToEdit && <div id="linkremove" onClick={this.removeLink}></div>}
-        </div>
-      )
-    } else if (authorizedToEdit) {
-      return (
-        <div className="attachments">
-          <div className="addLink">
-            <div id="addLinkIcon"></div>
-            <div id="addLinkInput">
-              <input ref={input => this.linkInput = input}
-                placeholder="Enter or paste a link"
-                value={linkEdit}
-                onChange={this.onLinkChangeHandler}
-                onKeyUp={this.onLinkKeyUpHandler}></input>
-              {linkEdit && <div id="addLinkReset"></div>}
-            </div>
+    if (!hasAttachment && !authorizedToEdit) return null
+
+    const className = hasAttachment
+      ? `embeds ${embedlyLinkLoaded ? '' : 'nonEmbedlyLink'}`
+      : 'attachments'
+
+    return (
+      <div className={className}>
+        <div className="addLink"
+          style={{ display: hasAttachment ? 'none' : 'block' }}
+        >
+          <div id="addLinkIcon"></div>
+          <div id="addLinkInput">
+            <input ref={input => this.linkInput = input}
+              placeholder="Enter or paste a link"
+              value={linkEdit}
+              onChange={this.onLinkChangeHandler}
+              onKeyUp={this.onLinkKeyUpHandler}></input>
+            {linkEdit && <div id="addLinkReset"></div>}
           </div>
         </div>
-      )
-    } else {
-      return null
-    }
+        <a style={{ display: hasAttachment ? 'block' : 'none' }} 
+          href={topic.get('link')}
+          id="embedlyLink"
+          target="_blank"
+          data-card-description="0"
+        >
+          {topic.get('link')}
+        </a>
+        {embedlyLinkStarted && !embedlyLinkLoaded && !embedlyLinkError && <div id="embedlyLinkLoader">loading...</div>}
+        {authorizedToEdit && (
+          <div id="linkremove"
+            style={{ display: hasAttachment ? 'block' : 'none' }}
+            onClick={this.removeLink}
+          />
+        )}
+      </div>
+    )
   }
 }
 
