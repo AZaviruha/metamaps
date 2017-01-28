@@ -1,3 +1,5 @@
+/* global $ */
+
 import React, { PropTypes, Component } from 'react'
 
 import DataModel from '../../Metamaps/DataModel'

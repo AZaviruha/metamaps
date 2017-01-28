@@ -1,4 +1,4 @@
-/* global $, CanvasLoader, Countable, Hogan, embedly */
+/* global $, embedly */
 import React, { PropTypes, Component } from 'react'
 
 class Attachments extends Component {
@@ -14,7 +14,7 @@ class Attachments extends Component {
   }
 
   componentDidMount = () => {
-    const { topic, ActiveMapper } = this.props
+    const { topic } = this.props
     embedly('on', 'card.rendered', this.embedlyCardRendered)
     topic.get('link') && topic.get('link') !== '' && this.loadLink()
   }
@@ -49,8 +49,8 @@ class Attachments extends Component {
     if (e.which === ENTER_KEY) {
       // TODO evaluate converting this to '//' no matter what (infer protocol)
       if (linkEdit.slice(0, 7) !== 'http://' &&
-      linkEdit.slice(0, 8) !== 'https://' &&
-      linkEdit.slice(0, 2) !== '//') {
+        linkEdit.slice(0, 8) !== 'https://' &&
+        linkEdit.slice(0, 2) !== '//') {
         finalLink = '//' + linkEdit
       }
       this.setState({ linkEdit: '' })
@@ -94,7 +94,7 @@ class Attachments extends Component {
         >
           <div id="addLinkIcon"></div>
           <div id="addLinkInput">
-            <input ref={input => this.linkInput = input}
+            <input ref={input => (this.linkInput = input)}
               placeholder="Enter or paste a link"
               value={linkEdit}
               onChange={this.onLinkChangeHandler}
@@ -102,7 +102,7 @@ class Attachments extends Component {
             {linkEdit && <div id="addLinkReset"></div>}
           </div>
         </div>
-        <a style={{ display: hasAttachment ? 'block' : 'none' }} 
+        <a style={{ display: hasAttachment ? 'block' : 'none' }}
           href={topic.get('link')}
           id="embedlyLink"
           target="_blank"

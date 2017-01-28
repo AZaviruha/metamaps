@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react'
-import { get } from 'lodash'
 import { RIETextArea } from 'riek'
 import Util from '../../Metamaps/Util'
 
@@ -13,8 +12,6 @@ class MdTextArea extends RIETextArea {
   }
 
   renderNormalComponent = () => {
-    const value = this.state.newValue || this.props.value
-
     // defaultProps MUST use dangerouslySetInnerHTML
     return <span tabIndex="0"
       className={this.makeClassString()}
@@ -32,7 +29,7 @@ class Desc extends Component {
       : Util.mdToHTML(this.props.desc)
 
     if (this.props.authorizedToEdit) {
-    return (
+      return (
       <div className="scroll">
         <div className="desc">
           <MdTextArea value={this.props.desc}
@@ -56,7 +53,7 @@ class Desc extends Component {
           <div className="clearfloat"></div>
         </div>
       </div>
-    )
+      )
     } else {
       return (
         <div className="scroll">

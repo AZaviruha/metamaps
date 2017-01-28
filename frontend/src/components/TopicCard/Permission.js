@@ -3,22 +3,22 @@ import React, { PropTypes, Component } from 'react'
 // TODO how do we make it so that clicking elsewhere on the topic
 // card cancels this
 class Permission extends Component {
-  
+
   constructor(props) {
     super(props)
     this.state = {
       selectingPermission: false
     }
   }
-  
+
   togglePermissionSelect = () => {
     this.setState({selectingPermission: !this.state.selectingPermission})
   }
-  
+
   openPermissionSelect = () => {
     this.setState({selectingPermission: true})
   }
-  
+
   closePermissionSelect = () => {
     this.setState({selectingPermission: false})
   }

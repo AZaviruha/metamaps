@@ -4,11 +4,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import Active from '../Active'
-import DataModel from '../DataModel'
-import GlobalUI from '../GlobalUI'
-import Mapper from '../Mapper'
-import Router from '../Router'
-import Visualize from '../Visualize'
 
 import ReactTopicCard from '../../components/TopicCard'
 
