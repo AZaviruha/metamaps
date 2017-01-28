@@ -91,6 +91,30 @@ const bindShowCardListeners = (topic, ActiveMapper) => {
   }
 }
 
+function metacodeOptions(metacodeSets) {
+	return (
+		<div id="metacodeOptions">
+			<ul>
+        {metacodeSets.map(set => {
+					<li key={set.name}>
+						<span>{set.name}</span>
+						<div class="expandMetacodeSet"></div>
+						<ul>
+              {set.metacodes.map(m => {
+								<li key={m.id} data-id={m.id}>
+									<img width="24" height="24" src={m.icon_path} alt={m.name} />
+									<div class="mSelectName">{m.name}</div>
+									<div class="clearfloat"></div>
+								</li>
+							})}
+						</ul>
+					</li>
+        })}
+  		</ul>
+		</div>
+	)
+}
+
 class Metacode extends Component {
   componentDidMount = () => {
     bindShowCardListeners(this.props.topic, this.props.ActiveMapper)
