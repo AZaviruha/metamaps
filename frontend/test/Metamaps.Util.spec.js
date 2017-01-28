@@ -123,6 +123,7 @@ describe('Metamaps.Util.js', function() {
       const md = '![Image](https://example.org/image.png)'
       const html = '<p>![Image](https://example.org/image.png)</p>'
       expect(Util.mdToHTML(md).trim()).to.equal(html)
+    })
   })
   describe('logCanvasAttributes', function() {
     it.skip('TODO need a canvas')
