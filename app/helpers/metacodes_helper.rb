@@ -48,7 +48,7 @@ module MetacodesHelper
     metacode_sets += MetacodeSet.order("name").all.map do |set|
       {
         name: set.name,
-        metacodes: set.metacodes.sort(&:name)
+        metacodes: set.metacodes.order("name")
           .map { |m| { id: m.id, icon_path: asset_path(m.icon), name: m.name } }
       }
     end
