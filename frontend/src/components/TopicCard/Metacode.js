@@ -101,19 +101,19 @@ class Metacode extends Component {
       <div id="metacodeOptions">
         <ul>
           {this.props.metacodeSets.map(set => {
-            <li key={set.name}>
+            return (<li key={set.name}>
               <span>{set.name}</span>
-              <div class="expandMetacodeSet"></div>
+              <div className="expandMetacodeSet"></div>
               <ul>
                 {set.metacodes.map(m => {
-                  <li key={m.id} data-id={m.id}>
+                  return (<li key={m.id} data-id={m.id}>
                     <img width="24" height="24" src={m.icon_path} alt={m.name} />
-                    <div class="mSelectName">{m.name}</div>
-                    <div class="clearfloat"></div>
-                  </li>
+                    <div className="mSelectName">{m.name}</div>
+                    <div className="clearfloat"></div>
+                  </li>)
                 })}
               </ul>
-            </li>
+            </li>)
           })}
         </ul>
       </div>
@@ -123,8 +123,6 @@ class Metacode extends Component {
 
   render = () => {
     const { metacode } = this.props
-    // the code for this is stored in /views/main/_metacodeOptions.html.erb
-    const metacodeSelectHTML = $('#metacodeOptions').html()
 
     return (
       <div className="linkItem icon">
